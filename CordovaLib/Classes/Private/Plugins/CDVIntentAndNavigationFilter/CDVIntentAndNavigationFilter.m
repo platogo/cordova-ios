@@ -31,6 +31,15 @@
 
 @implementation CDVIntentAndNavigationFilter
 
+- (void) addDynamicAllowedUrl:(CDVInvokedUrlCommand*)command
+{
+    NSString *url = command.arguments[0];
+    [self.allowNavigations addObject:url];
+    NSLog(@"%@ added successfully", url);
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:url];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+}
+
 #pragma mark NSXMLParserDelegate
 
 - (void)parser:(NSXMLParser*)parser didStartElement:(NSString*)elementName namespaceURI:(NSString*)namespaceURI qualifiedName:(NSString*)qualifiedName attributes:(NSDictionary*)attributeDict
