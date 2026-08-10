@@ -31,15 +31,6 @@
 
 @implementation CDVIntentAndNavigationFilter
 
-- (void) addDynamicAllowedUrl:(CDVInvokedUrlCommand*)command
-{
-    NSString *url = command.arguments[0];
-    [self.allowNavigations addObject:url];
-    NSLog(@"%@ added successfully", url);
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:url];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
-}
-
 #pragma mark NSXMLParserDelegate
 
 - (void)parser:(NSXMLParser*)parser didStartElement:(NSString*)elementName namespaceURI:(NSString*)namespaceURI qualifiedName:(NSString*)qualifiedName attributes:(NSDictionary*)attributeDict
@@ -108,6 +99,23 @@
 - (CDVIntentAndNavigationFilterValue) filterUrl:(NSURL*)url
 {
     return [[self class] filterUrl:url allowIntentsList:self.allowIntentsList navigationsAllowList:self.allowNavigationsList];
+}
+
+- (void) addDynamicAllowedUrl:(CDVInvokedUrlCommand*)command
+{
+    NSString *url = command.arguments[0];
+
+    if (![self.allowNavigations containsObject:url]) {
+        [self.allowNavigations addObject:url];
+        // rebuild the allow list so the new entry is actually used by filterUrl:
+        self.allowNavigationsList = [[CDVAllowList alloc] initWithArray:self.allowNavigations];
+        NSLog(@"%@ added successfully", url);
+    } else {
+        NSLog(@"%@ already allowed, skipping", url);
+    }
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:url];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 #define CDVWebViewNavigationTypeLinkClicked 0
