@@ -58,7 +58,12 @@ cordova platform add ios
 
 ## Updating
 
-To sync with the latest changes from the original cordova-android repo, simply pull the branch and rebase.
+To sync with the latest changes from the original cordova-ios repo:
+
+* Pull the latest changes
+* Rebase this branch
+* Run `npm i` to install dependencies
+* Run `npm run prepare` to update the `cordova.js` built script
 
 ## Debugging in Xcode
 
