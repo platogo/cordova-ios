@@ -56,6 +56,15 @@ cordova platform rm ios
 cordova platform add ios
 ```
 
+## Updating
+
+To sync with the latest changes from the original cordova-ios repo:
+
+* Pull the latest changes
+* Rebase this branch
+* Run `npm i` to install dependencies
+* Run `npm run prepare` to update the `cordova.js` built script
+
 ## Debugging in Xcode
 
 Import project in Xcode through _File > Open_ and targeting `/path/to/your-cdv-project/platforms/ios/App.xcworkspace`.
